@@ -91,14 +91,14 @@ except PermissionError:
     # Current work-around for Pop!_OS where symlink causes permission issues
     print("[!] Warning: Cannot get distro name")
     if os.path.exists("/etc/pop-os/os-release"):
-            # Check if using a Snap 
+            # Check if using a Snap
             if os.getenv("PKG_MARKER") == "SNAP":
-                print("[!] Snap install on PopOS detected, you must manually run the following" 
-                        " commands in another terminal:\n")            
+                print("[!] Snap install on PopOS detected, you must manually run the following"
+                        " commands in another terminal:\n")
                 print("[!] Backup the /etc/os-release file:")
-                print("sudo mv /etc/os-release /etc/os-release-backup\n")                
+                print("sudo mv /etc/os-release /etc/os-release-backup\n")
                 print("[!] Create hardlink to /etc/os-release:")
-                print("sudo ln /etc/pop-os/os-release /etc/os-release\n")            
+                print("sudo ln /etc/pop-os/os-release /etc/os-release\n")
                 print("[!] Aborting. Restart auto-cpufreq when you created the hardlink")
                 sys.exit(1)
             else:
@@ -140,7 +140,7 @@ def get_formatted_version():
     literal_version = pkg_resources.require("auto-cpufreq")[0].version
     splitted_version = literal_version.split("+")
     formatted_version = splitted_version[0]
-    
+
     if len(splitted_version) > 1:
         formatted_version += " (git: " + splitted_version[1] + ")"
 
@@ -463,7 +463,7 @@ def countdown(s):
     os.environ["TERM"] = "xterm"
 
     print("\t\t\"auto-cpufreq\" is about to refresh ", end = "")
-    
+
     # empty log file if size is larger then 10mb
     if auto_cpufreq_stats_file is not None:
         log_size = os.path.getsize(auto_cpufreq_stats_path)
@@ -1070,7 +1070,7 @@ def sysinfo():
     """
 
     # processor_info
-    model_name = getoutput("egrep 'model name' /proc/cpuinfo -m 1").split(":")[-1]
+    model_name = getoutput("grep -E 'model name' /proc/cpuinfo -m 1").split(":")[-1]
     print(f"Processor:{model_name}")
 
     # get core count
@@ -1098,7 +1098,7 @@ def sysinfo():
     print(f"CPU min frequency: {min_freq:.0f} MHz\n")
 
     # get coreid's and frequencies of online cpus by parsing /proc/cpuinfo
-    coreid_info = getoutput("egrep 'processor|cpu MHz|core id' /proc/cpuinfo").split("\n")
+    coreid_info = getoutput("grep -E 'processor|cpu MHz|core id' /proc/cpuinfo").split("\n")
     cpu_core = dict()
     freq_per_cpu = []
     for i in range(0, len(coreid_info), 3):
